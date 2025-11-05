@@ -24,9 +24,15 @@ numberButtons.forEach(button => {
 
 function addDigit(digit) {
     if (operator === null) {
+        if (number1 === '0' && digit === '0') {
+            return;
+        }
         number1 = (number1 === null) ? digit : number1 + digit;
         display.textContent = number1;
     } else {
+        if (number2 === '0' && digit === '0') {
+            return;
+        }
         number2 = (number2 === null) ? digit : number2 + digit;
         display.textContent = number1 + operator + number2;
     }
