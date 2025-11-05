@@ -22,15 +22,6 @@ numberButtons.forEach(button => {
     });
 });
 
-// Gestion des chiffres au clavier
-// Enter = equals
-// C ou esc = clear
-numberButtons.forEach(button => {
-    button.addEventListener('keyup', (event) => {
-
-    })
-})
-
 
 function addDigit(digit) {
     if (operator === null) {
@@ -58,12 +49,14 @@ function SelectOperator(selectedOperator) {
 }
 
 // Gestion du bouton clear
-clearButton.addEventListener('click', () => {
+clearButton.addEventListener('click', clearDisplay);
+
+function clearDisplay() {
     display.textContent = '0';
     number1 = null;
     operator = null;
     number2 = null;
-});
+};
 
 // Gestion du bouton égal
 equalsButton.addEventListener('click', calculate(number1, number2, operator));
@@ -85,6 +78,24 @@ function calculate(number1, number2, operator) {
     display.textContent = result;
 }
 
-if (!result) {
-    console.log(result);
-}
+// Gestion du clavier
+document.addEventListener('keydown', (event) => {
+    const key = event.key;
+
+    if (!isNaN(key) && key !== ' ') {
+        addDigit(key);
+    }
+
+    else if (['+', '-', '*', '/'].includes(key)) {
+        SelectOperator(key);
+    }
+
+    else if (key === 'Enter' || key === '=') {
+        event.preventDefault();
+        calculate(number1, number2, operator);
+    }
+
+    else if (key.toUpperCase() === 'C' || key === 'Escape') {
+        clearDisplay();
+    }
+});
