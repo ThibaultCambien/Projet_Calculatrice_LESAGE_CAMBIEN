@@ -1,7 +1,6 @@
 let number1 = null;
 let operator = null;
 let number2 = null;
-let result = 0;
 
 const display = document.querySelector('#display');
 const numberButtons = document.querySelectorAll('[data-number]');
@@ -55,33 +54,44 @@ function SelectOperator(selectedOperator) {
 }
 
 // Gestion du bouton clear
-clearButton.addEventListener('click', clearDisplay);
-
-function clearDisplay() {
+clearButton.addEventListener('click', () => {
     display.textContent = '0';
     number1 = null;
     operator = null;
     number2 = null;
-};
+});
 
 // Gestion du bouton égal
-equalsButton.addEventListener('click', calculate(number1, number2, operator));
+equalsButton.addEventListener('click', () => {
+    if (number1 !== null && operator !== null && number2 !== null) {
+        const result = calculate();
+        display.textContent = result;
+        number1 = result.toString();
+        operator = null;
+        number2 = null;
+    }
+});
 
-function calculate(number1, number2, operator) {
+function calculate() {
     const a = parseFloat(number1);
     const b = parseFloat(number2);
+    let result = 0;
 
     switch (operator) {
-        case '+': result = a + b
+        case '+':
+            result = a + b;
             break;
-        case '-': result = a - b
+        case '-':
+            result = a - b;
             break;
-        case '*': result = a * b
+        case '*':
+            result = a * b;
             break;
-        case '/': result = a / b
+        case '/':
+            result = b !== 0 ? a / b : 'Erreur';
             break;
     }
-    display.textContent = result;
+    return result;
 }
 
 // Gestion du clavier
@@ -90,18 +100,25 @@ document.addEventListener('keydown', (event) => {
 
     if (!isNaN(key) && key !== ' ') {
         addDigit(key);
-    }
-
-    else if (['+', '-', '*', '/'].includes(key)) {
+    } else if (['+', '-', '*', '/'].includes(key)) {
         SelectOperator(key);
-    }
-
-    else if (key === 'Enter' || key === '=') {
+    } else if (key === 'Enter' || key === '=') {
         event.preventDefault();
-        calculate(number1, number2, operator);
-    }
-
-    else if (key.toUpperCase() === 'C' || key === 'Escape') {
+        if (number1 !== null && operator !== null && number2 !== null) {
+            const result = calculate();
+            display.textContent = result;
+            number1 = result.toString();
+            operator = null;
+            number2 = null;
+        }
+    } else if (key.toUpperCase() === 'C' || key === 'Escape') {
         clearDisplay();
     }
 });
+
+function clearDisplay() {
+    display.textContent = '0';
+    number1 = null;
+    operator = null;
+    number2 = null;
+}
