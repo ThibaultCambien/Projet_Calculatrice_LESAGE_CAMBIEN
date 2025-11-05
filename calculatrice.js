@@ -1,14 +1,18 @@
 const display = document.querySelector('#display');
 
-let numberOne = [];
-let numberTwo = [];
+let number1 = null;
+let operator = null;
+let number2 = null;
 
 const numberButtons = document.querySelectorAll('[data-number]');
+const operatorButtons = document.querySelectorAll('.operator');
+const clearButton = document.querySelector('.clear');
 
 if (display && display.textContent === '') {
     display.textContent = '0';
 }
 
+// Gestion des chiffres
 numberButtons.forEach(button => {
     button.addEventListener('click', (event) => {
         const digit = event.currentTarget.dataset.number;
@@ -17,36 +21,34 @@ numberButtons.forEach(button => {
 });
 
 function addDigit(digit) {
-
-    if (display.textContent === '0') {
-        display.textContent = digit;
+    if (operator === null) {
+        number1 = (number1 === null) ? digit : number1 + digit;
+        display.textContent = number1;
     } else {
-        display.textContent += digit;
+        number2 = (number2 === null) ? digit : number2 + digit;
+        display.textContent = number1 + operator + number2;
     }
-
-    numberOne = display.textContent;
 }
 
-const operatorButtons = document.querySelectorAll('.operator');
-const clearButton = document.querySelector('.clear');
-
-let currentInput = '';
-
-//Gestion des opérateurs
+// Gestion des opérateurs
 operatorButtons.forEach(button => {
-    button.addEventListener('click', () => handleOperator(button.getAttribute('data-operator')));
+    button.addEventListener('click', () => {
+        const selectedOperator = button.getAttribute('data-operator');
+        SelectOperator(selectedOperator);
+    });
 });
 
-function handleOperator(operator) {
-    const lastChar = display.textContent.slice(-1);
-    if ('+-*/'.includes(lastChar)) return;
-    display.textContent += operator;
-    currentInput = display.textContent;
+function SelectOperator(selectedOperator) {
+    if (number1 !== null && operator === null) {
+        operator = selectedOperator;
+        display.textContent = number1 + operator;
+    }
 }
 
-//Gestion du bouton clear
+// Gestion du bouton clear
 clearButton.addEventListener('click', () => {
-    display.textContent = '';
-    currentInput = '';
+    display.textContent = '0';
+    number1 = null;
+    operator = null;
+    number2 = null;
 });
-
