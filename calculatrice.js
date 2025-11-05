@@ -1,6 +1,7 @@
 const display = document.querySelector('#display');
 
-let currentValue = '';
+let numberOne = [];
+let numberTwo = [];
 
 const numberButtons = document.querySelectorAll('[data-number]');
 
@@ -23,10 +24,11 @@ function addDigit(digit) {
         display.textContent += digit;
     }
 
-    currentValue = display.textContent;
+    numberOne = display.textContent;
 }
 
 const operatorButtons = document.querySelectorAll('.operator');
+const clearButton = document.querySelector('.clear');
 
 let currentInput = '';
 
@@ -41,3 +43,10 @@ function handleOperator(operator) {
     display.textContent += operator;
     currentInput = display.textContent;
 }
+
+//Gestion du bouton clear
+clearButton.addEventListener('click', () => {
+    display.textContent = '';
+    currentInput = '';
+});
+
