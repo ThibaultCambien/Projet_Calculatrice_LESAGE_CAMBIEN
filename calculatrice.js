@@ -4,9 +4,11 @@ let number1 = null;
 let operator = null;
 let number2 = null;
 
+
 const numberButtons = document.querySelectorAll('[data-number]');
 const operatorButtons = document.querySelectorAll('.operator');
 const clearButton = document.querySelector('.clear');
+const equalsButton = document.querySelector('.equals');
 
 if (display && display.textContent === '') {
     display.textContent = '0';
@@ -52,3 +54,31 @@ clearButton.addEventListener('click', () => {
     operator = null;
     number2 = null;
 });
+
+// Gestion du bouton égal
+equalsButton.addEventListener('click', () => {
+    if (number1 !== null && operator !== null && number2 !== null) {
+        const result = calculate(number1, number2, operator);
+        display.textContent = result;
+        number1 = result.toString();
+        operator = null;
+        number2 = null;
+    }});
+
+function calculate() {
+        const a = parseFloat(number1);
+        const b = parseFloat(number2);
+        let result = 0;
+    
+        switch (operator) {
+            case '+': result = a + b
+                break;
+            case '-': result = a - b
+                break;
+            case '*': result = a * b
+                break;
+            case '/': result = a / b
+                break;
+        }
+        return result;
+    }
